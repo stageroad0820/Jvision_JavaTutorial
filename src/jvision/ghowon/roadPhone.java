@@ -124,7 +124,7 @@ class PhoneBookManager {
 					String selName = Menu.getScanner().next();
 					
 					for (int i = 0; i < infoStorage.length; i++) {
-						if (infoStorage[i] != null && infoStorage[i].getName().contains(selName)) {
+						if (infoStorage[i] != null && infoStorage[i].getName().equals(selName)) {
 							for (int j = i; j < (infoStorage.length - 1); j++) {
 								infoStorage[j] = infoStorage[j+1] ;
 							}
