@@ -62,6 +62,8 @@ class FileManager {
 			bfw.write(key + ":" + value);
 			bfw.newLine();
 			bfw.close();
+			
+			System.out.println("[Debug] Closing write buffer. (w1)");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -100,6 +102,7 @@ class FileManager {
 						}
 						
 						if (i == (line.length - 1)) {
+							System.out.println("[Debug] Closing reading buffer. (r1)");
 							bfr.close();
 						}
 					}
@@ -131,40 +134,49 @@ class PhoneBookManager2 {
 	String extension = ".txt";
 	
 	public void inputData() {
-		System.out.println("데이터 입력을 시작합니다.");
-		
-		System.out.println("[1/3] 이름을 입력해 주세요.");
-		String name = sc.next();
-		
-		System.out.println("[2/3] 전화번호를 입력해 주세요. (- 포함 가능)");
-		String phone = sc.next();
-		
-		System.out.println("[3/3] 생년월일을 입력해 주세요. (- 포함 가능)");
-		String birth = sc.next();
-		
-		File file = fm.createFile(name, extension);
-		
-		if (file.exists()) {
-			System.out.println("이미 있는 데이터 입니다. 아래를 참고해 주세요.");
+		try {
+			System.out.println("데이터 입력을 시작합니다.");
 			
-			fm.showPhoneInfo(file);
-		}
-		else {
-			fm.writeFile(file, "name", name);
-			fm.writeFile(file, "phone", phone);
-			fm.writeFile(file, "birth", birth);
+			System.out.println("[1/3] 이름을 입력해 주세요.");
+			String name = sc.next();
 			
-			System.out.println("[안내] 완료 작업: 파일 무결성 검사");
+			System.out.println("[2/3] 전화번호를 입력해 주세요. (- 포함 가능)");
+			String phone = sc.next();
 			
-			if (file.exists() && !file.isDirectory()) {
-				System.out.println("[완료] 입력하신 정보는 아래와 같습니다.");
-				System.out.println("- 이름: " + fm.getName(file));
-				System.out.println("- 전화번호: " + fm.getPhone(file));
-				System.out.println("- 생년월일: " + fm.getBirth(file) + "\n");
+			System.out.println("[3/3] 생년월일을 입력해 주세요. (- 포함 가능)");
+			String birth = sc.next();
+			
+			File file = fm.createFile(name, extension);
+			
+			BufferedReader bfr = new BufferedReader(new FileReader(file));
+			
+			if (bfr.readLine() != null) {
+				System.out.println("이미 있는 데이터 입니다. 아래를 참고해 주세요.");
+				
+				fm.showPhoneInfo(file);
 			}
 			else {
-				System.out.println("데이터 저장용 파일 생성에 실패하였습니다.");
+				fm.writeFile(file, "name", name);
+				fm.writeFile(file, "phone", phone);
+				fm.writeFile(file, "birth", birth);
+				
+				System.out.println("[안내] 완료 작업: 파일 무결성 검사");
+				
+				if (file.exists() && !file.isDirectory()) {
+					System.out.println("[완료] 입력하신 정보는 아래와 같습니다.");
+					System.out.println("- 이름: " + fm.getName(file));
+					System.out.println("- 전화번호: " + fm.getPhone(file));
+					System.out.println("- 생년월일: " + fm.getBirth(file) + "\n");
+				}
+				else {
+					System.out.println("데이터 저장용 파일 생성에 실패하였습니다.");
+				}
 			}
+			
+			bfr.close();
+			System.out.println("[Debug] Close reading buffer. (r2)");
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -271,6 +283,7 @@ class PhoneBookManager2 {
 					switch (select) {
 					case 1:
 						System.out.println("'" + name + "' (을)를 제거합니다. 잠시만 기다려 주세요...");
+						file.delete();
 						
 						if (file.delete()) {
 							System.out.println("데이터가 성공적으로 제거되었습니다.");
@@ -365,7 +378,6 @@ class Menu2 {
 	}
 }
 
-@SuppressWarnings("resource")
 public class roadPhone2 {
 	public static void main(String[] args) {
 		PhoneBookManager2 pbm = new PhoneBookManager2();
@@ -390,6 +402,7 @@ public class roadPhone2 {
 				break;
 			case 4:
 				System.out.println("\n프로그램을 종료합니다.");
+				sc.close();
 				return;
 			default:
 				System.err.println("\n잘못된 값을 입력하셨습니다. 다시 입력해 주세요.");
