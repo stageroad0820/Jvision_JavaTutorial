@@ -12,9 +12,11 @@ import java.util.Scanner;
 public class roadPhone2 {
 	public static void main(String[] args) {
 		PhoneBookManager2 pbm = new PhoneBookManager2();
+		FileManager fm = new FileManager();
 		Scanner sc = new Scanner(System.in);
 		
 		while (true) {
+			System.out.println("\n현재 디버그 모드 상태는 " + fm.isDebug() + " 입니다.");
 			Menu2.showMenu();
 			String sel = sc.next();
 			
@@ -54,14 +56,14 @@ class FileManager {
 	String def_path = System.getenv("USERPROFILE") + "\\Documents\\Java\\PhoneBook\\";
 	String extension = ".txt"; 
 	
-	boolean debug = true;
+	boolean debug = false;
 	
 	String prefix = "[디버그/안내] ";
 	String warning = "[디버그/주의] ";
 	String error = "[디버그/오류] ";
 	
-	public FileManager(boolean debug) {
-		this.debug = debug;
+	public FileManager() {
+		// Nothing
 	}
 	
 	public void createFile(String name) {
@@ -70,7 +72,7 @@ class FileManager {
 		
 		try {
 			file.createNewFile();
-			if (debug) { System.out.println(prefix + "새로운 파일을 생성하였습니다. 파일 위치: " + file.getPath()); }
+			if (debug) System.out.println(prefix + "새로운 파일을 생성하였습니다. 파일 위치: " + file.getPath());
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.err.println(error + "새로운 파일을 생성하지 못했습니다. 사유: " + e.getLocalizedMessage());
@@ -85,7 +87,7 @@ class FileManager {
 			return null;
 		}
 		else {
-			if (debug) { System.out.println(prefix + file.getName() + " 파일을 불러왔습니다."); }
+			if (debug) System.out.println(prefix + file.getName() + " 파일을 불러왔습니다.");
 			return file;
 		}
 	}
@@ -100,7 +102,7 @@ class FileManager {
 			
 			bfw.flush();
 			
-			if (debug) { System.out.println(prefix + file.getName() + " 파일을 작성하고, 작성에 사용한 BufferedWriter 출력 스트림을 닫았습니다. (FileManager/writeFile())"); }
+			if (debug) System.out.println(prefix + file.getName() + " 파일을 작성하고, 작성에 사용한 BufferedWriter 출력 스트림을 닫았습니다. (FileManager/writeFile())");
 			fw.close();
 			bfw.close();
 		} catch (IOException e) {
@@ -125,32 +127,33 @@ class FileManager {
 					for (int i = 0; i < line.length; i++) {
 						if ((temp = bfr.readLine()) != null) {
 							line[i] = temp;
-							if (debug) { System.out.println(prefix + file.getName() + " 파일의 " + i + " 번째 줄을 읽었습니다. 내용: [" + temp + "]"); }
+							if (debug) System.out.println(prefix + file.getName() + " 파일의 " + i + " 번째 줄을 읽었습니다. 내용: [" + temp + "]"); }
 							
 							String[] value = line[i].split(":");
 							
 							if (value[0].contains(info) || value[0].equals(info)) {
-								if (debug) {System.out.println(prefix + file.getName() + " 파일의 " + i + " 번째 줄에 있는 " + info + " 내용을 읽었습니다. 값: [" + value[1] + "]"); }
+								if (debug) System.out.println(prefix + file.getName() + " 파일의 " + i + " 번째 줄에 있는 " + info + " 내용을 읽었습니다. 값: [" + value[1] + "]"); 
+								fr.close();
+								bfr.close();
 								return value[1];
 							}
 							
 							if (i == (line.length - 1)) {
-								if (debug) { System.out.println(prefix + " BufferedReader 입력 스트림을 닫았습니다. (FileManager/getInfo())"); }
+								if (debug) System.out.println(prefix + " BufferedReader 입력 스트림을 닫았습니다. (FileManager/getInfo())");
 								fr.close();
 								bfr.close();
 							}
 						}
-					}
 				} catch (IOException e) {
-					e.printStackTrace();
+						e.printStackTrace();
 					
-					System.err.println(error + "BufferedReader 입력 스트림을 닫지 못했습니다. [" + e.getMessage() + "/" + e.getCause() + "]");
-					return null;
+						System.err.println(error + "BufferedReader 입력 스트림을 닫지 못했습니다. [" + e.getMessage() + "/" + e.getCause() + "]");
+						return null;
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
 				
-				if (debug) { System.err.println(error + file.getName() + " 파일의 내용을 불러오지 못했습니다. [" + e.getMessage() + "/" + e.getCause() + "]"); }
+				if (debug) System.err.println(error + file.getName() + " 파일의 내용을 불러오지 못했습니다. [" + e.getMessage() + "/" + e.getCause() + "]");
 				return null;
 			}
 		}
@@ -204,9 +207,8 @@ class FileManager {
 }
 
 class PhoneBookManager2 {
-	FileManager fm = new FileManager(true);
+	FileManager fm = new FileManager();
 	Scanner sc;
-	
 	
 	public void inputData() {
 		sc = new Scanner(System.in);
@@ -237,16 +239,16 @@ class PhoneBookManager2 {
 				fm.showPhoneInfo(file);
 			}
 			else {
-				if (fm.isDebug()) { System.out.println(fm.prefix + "파일 입력을 시작합니다."); }
+				if (fm.isDebug()) System.out.println(fm.prefix + "파일 입력을 시작합니다.");
 				
 				fm.writeFile(file, "name", name);
 				fm.writeFile(file, "phone", phone);
 				fm.writeFile(file, "birth", birth);
 				
-				if (fm.isDebug()) { System.out.println(fm.prefix + "파일 입력이 완료되었습니다. 파일 무결성 검사를 시작합니다."); }
+				if (fm.isDebug()) System.out.println(fm.prefix + "파일 입력이 완료되었습니다. 파일 무결성 검사를 시작합니다.");
 				
 				if (file.exists() && !file.isDirectory()) {
-					if (fm.isDebug()) { System.out.println(fm.prefix + "파일 무결성 검사가 완료되었습니다."); }
+					if (fm.isDebug()) System.out.println(fm.prefix + "파일 무결성 검사가 완료되었습니다.");
 					
 					System.out.println("[안내] 데이터가 생성되었습니다. 입력하신 데이터는 다음과 같습니다.");
 					fm.showPhoneInfo(file);
@@ -256,13 +258,13 @@ class PhoneBookManager2 {
 				}
 			}
 			
-			if (fm.isDebug()) { System.out.println(fm.prefix + "BufferedReader 입력 스트림을 닫았습니다. (PhoneBookManager2/inputData())"); }
+			if (fm.isDebug()) System.out.println(fm.prefix + "BufferedReader 입력 스트림을 닫았습니다. (PhoneBookManager2/inputData())");
 			fr.close();
 			bfr.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 			
-			if (fm.isDebug()) { System.out.println(fm.error + "BufferedReader 입력 스트림을 시작하거나 닫지 못했습니다. [" + e.getMessage() + "/" + e.getCause() + "]"); }
+			if (fm.isDebug()) System.out.println(fm.error + "BufferedReader 입력 스트림을 시작하거나 닫지 못했습니다. [" + e.getMessage() + "/" + e.getCause() + "]");
 		}
 	}
 	
@@ -283,11 +285,16 @@ class PhoneBookManager2 {
 		}
 		else {
 			for (File file : dir.listFiles()) {
-				if (file.getName().contains(search)) {
+				if (fm.isDebug()) System.out.println("파일 검색: " + file.getName().toLowerCase());
+				
+				if (file.getName().toLowerCase().contains(search.toLowerCase())) {
+					if (fm.isDebug()) System.out.println("파일 추가 " + (found + 1) + " 번째: " + file.getName().toLowerCase());
 					list.add(file);
 					found++;
 				}
 			}
+			
+			if (fm.isDebug()) System.out.println("찾은 개수: " + found + " / 배열 크기: " + list.size());
 			
 			if (found == 1) {
 				System.out.println("[안내] '" + search + "' (이)가 포함된 데이터를 찾았습니다. 아래의 내용을 확인해 주세요.");
@@ -302,7 +309,7 @@ class PhoneBookManager2 {
 					
 					if (menu.matches("^[1-2]$$")) {
 						if (menu.equals("1")) {
-							System.out.println("[안내] '" + search + " (이)가 포함된 모든 데이터를 표시합니다.");
+							System.out.println("[안내] '" + search + "' (이)가 포함된 모든 데이터를 표시합니다.");
 							
 							for (int i = 0; i < list.size(); i++) {
 								fm.showPhoneInfo(list.get(i));
@@ -313,12 +320,12 @@ class PhoneBookManager2 {
 							System.out.println("[안내] '" + search + "' (이)가 포함된 데이터는 다음과 같습니다. 정확한 이름을 입력해 주세요.");
 							
 							for (int i = 0; i < list.size(); i++) {
-								System.out.println(list.get(0).getName());
+								System.out.println(list.get(i).getName());
 							}
 							
 							search = sc.next();
 							
-							if (list.get(0).getName().toLowerCase().equals(search.toLowerCase())) {
+							if (list.get(0).getName().toLowerCase().equals(search.toLowerCase() + fm.getExtension())) {
 								System.out.println("[안내] " + list.get(0).getName() + " 의 정보를 표시합니다.");
 								
 								fm.showPhoneInfo(list.get(0));
@@ -363,22 +370,27 @@ class PhoneBookManager2 {
 		}
 		else {
 			for (File file : dir.listFiles()) {
-				if (file.getName().contains(search)) {
+				if (fm.isDebug()) System.out.println("파일 검색: " + file.getName().toLowerCase());
+				
+				if (file.getName().toLowerCase().contains(search.toLowerCase())) {
+					if (fm.isDebug()) { System.out.println("파일 추가 " + (found + 1) + "번째: " + file.getName().toLowerCase()); }
 					list.add(file);
 					found++;
 				}
 			}
 			
+			if (fm.isDebug()) System.out.println("찾은 개수: " + found + " / 배열 크기: " + list.size());
+			
 			if (found == 1) {
 				do {
-					System.out.println("[안내] '" + search + "' (이)가 포함된 데이터를 삭제합니다. 삭제할까요?");
+					System.out.println("[안내] '" + list.get(0).getName() + "' (을)를 삭제합니다. 삭제할까요?");
 					System.out.println("[ 1. 예 / 2. 아니오] 숫자로 입력해 주세요.");
 					String menu = sc.next();
 					
 					if (menu.matches("^[1-2]$")) {
 						if (menu.equals("1")) {
 							System.out.println("[안내] '" + list.get(0).getName() + "' 데이터를 제거합니다. 잠시만 기다려 주세요...");
-							fm.deleteFile(fm.getFile(list.get(0).getName()));
+							fm.deleteFile(list.get(0));
 							break;
 						}
 						else if (menu.equals("2")) {
@@ -411,29 +423,29 @@ class PhoneBookManager2 {
 								fm.deleteFile(list.get(i));
 							}
 							
-							sc.close();
-							if (fm.isDebug()) { System.out.println(fm.prefix + "Scanner 리소스를 종료하였습니다. (PhoneBookManager2/deleteData())"); }
-							
 							break;
 						}
 						else if (menu.equals("2")) {
 							System.out.println("[안내] '" + search + "' (이)가 포함된 데이터는 다음과 같습니다. 정확한 이름을 입력해 주세요.");
 							
 							for (int i = 0; i < list.size(); i++) {
-								System.out.println(list.get(0).getName());
+								System.out.println(list.get(i).getName());
 							}
 							
 							search = sc.next();
 							
-							if (list.get(0).getName().toLowerCase().equals(search.toLowerCase())) {
-								System.out.println("[안내] " + list.get(0).getName() + " 파일을 삭제합니다.");
+							File temp = fm.getFile(search);
+							
+							if (list.contains(temp)) {
+								System.out.println("[안내] " + temp.getName() + " 파일을 삭제합니다.");
 								
-								fm.deleteFile(list.get(0));
+								fm.deleteFile(temp);
 							}
 							else {
-								System.out.println("[안내] 이름이 '" + search + "' 인 데이터를 찾을 수 없습니다. 이름을 정확히 입력했는지 확인하신 뒤 다시 시도해 주세요.");								
-								break;
+								System.out.println("[안내] 이름이 '" + search + "' 인 데이터를 찾을 수 없습니다. 이름을 정확히 입력했는지 확인하신 뒤 다시 시도해 주세요.");
 							}
+							
+							break;
 						}
 						else {
 							System.out.println("[안내] 잘못 입력하셨습니다. 다시 입력해 주세요.");
