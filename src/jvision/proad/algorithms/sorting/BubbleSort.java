@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class BubbleSort {
 	static int[] arr;
 	static boolean isDebug = false;
+	static long process = 0L;
 	
 	public BubbleSort(int size) {
 		if (isDebug) System.out.println("[디버그] 생성자 BubbleSort(int size) 호출.");
@@ -44,6 +45,8 @@ public class BubbleSort {
 	 */
 	public int[] sorting(int[] source) {
 		if (isDebug) System.out.println("[디버그] 메소드 sorting(int[] source) start.");
+		
+		long start_algorithm = System.currentTimeMillis();
 		
 		int left, right, temp;
 		int size = source.length;
@@ -88,6 +91,12 @@ public class BubbleSort {
 		}
 		
 		if (isDebug) System.out.println("[디버그] 메소드 sorting(int[] source) 종료,");
+		
+		long stop_algorithm = System.currentTimeMillis();
+		this.setProcessTime((stop_algorithm - start_algorithm));
+		
+		if (isDebug) System.out.println("\nPrc_Start: " + start_algorithm + " / Prc_Stop: " + stop_algorithm + " / Prc_Time: " + (stop_algorithm - start_algorithm));
+		
 		return sorted;
 	}
 	
@@ -111,6 +120,14 @@ public class BubbleSort {
 		System.out.println("");
 	}
 	
+	private void setProcessTime(long time) {
+		BubbleSort.process = time;
+	}
+	
+	private static long getProcessTime() {
+		return BubbleSort.process;
+	}
+	
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("버블 정렬을 실행할 배열의 크기를 입력해 주세요: ");
@@ -123,6 +140,9 @@ public class BubbleSort {
 		
 		long prc_stop = System.currentTimeMillis();
 		
-		System.out.println("\n프로그램 처리 시간: " + (prc_stop - prc_start) + " ms");
+		if (isDebug) System.out.println("\nPrg_Start: " + prc_start + " / Prg_Stop: " + prc_stop + " / Prg_Time: " + (prc_stop - prc_start));
+		
+		System.out.println("\n정렬 알고리즘 처리 시간: " + BubbleSort.getProcessTime() + " ms");
+		System.out.println("프로그램 처리 시간: " + (prc_stop - prc_start) + " ms");
 	}
 }
