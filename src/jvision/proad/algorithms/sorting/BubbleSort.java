@@ -2,6 +2,23 @@ package jvision.proad.algorithms.sorting;
 
 import java.util.Scanner;
 
+/*
+ * > 공부하는 로드: 거품 정렬 (Bubble Sort)
+ * 
+ * > 작동 방식:
+ * 1. 배열의 맨 오른쪽 끝에 저울을 두고 저울 좌우에 있는 숫자를 비교합니다.
+ * 2. 만약 저울 왼쪽에 있는 숫자가 오른쪽에 있는 숫자보다 클 경우 좌우 숫자를 교체합니다.
+ * 3. 비교를 완료했으면 저울을 한칸 왼쪽으로 이동합니다.
+ * 4. 만약 저울 왼쪽에 있는 숫자가 오른쪽에 있는 숫자보다 작을 경우 교체하지 않습니다.
+ * 5. 저울이 맨 왼쪽으로 왔다면 맨 왼쪽에 있는 숫자는 정렬이 끝났다고 간주하고 다시 처음부터 반복합니다.
+ * 6. 위의 방법을 정렬이 끝날 때 까지 반복합니다.
+ * 7. 모든 원소가 정렬되면 끝납니다.
+ * 
+ * > (기준: 원소 20개 * 10번) 평균 작동 시간: 프로그램 전체 8.5ms / 정렬 처리 0ms
+ * 
+ * [작동 방식 출처: 안드로이드 앱 "알고리즘 도감"]
+ * [링크: https://play.google.com/store/apps/details?id=wiki.algorithm.algorithms]
+ */
 public class BubbleSort {
 	static int[] arr;
 	static boolean isDebug = false;
@@ -12,14 +29,11 @@ public class BubbleSort {
 		
 		arr = new int[size];
 		
-		// 중복을 포함하지 않는 1~100 까지의 무작위 수를 생성하여 배열에 차례대로 입력
 		for (int i = 0; i < size; i++) {
 			int random = (int)(Math.random() * 100) + 1;
 			arr[i] = random;
 			
-			// 배열 내의 중복 값 확인
 			for (int j = 0; j < i; j++) {
-				// 중복되는 값이 있을 경우 해당 값에 새로운 값을 덮어 씌우기 위해 i 를 1 줄이고 입력 실행
 				if(arr[i] == arr[j]) {
 					i--;
 					break;
@@ -37,14 +51,8 @@ public class BubbleSort {
 		}
 	}
 	
-	/*
-	 * < BubbleSort 의 정렬 방식 >
-	 * 1. 맨 오른쪽 끝 숫자와 그 숫자의 왼쪽 숫자에 저울을 두어 비교 시작
-	 * 2. 왼쪽에 있는 숫자가 오른쪽에 있는 숫자보다 클 경우 서로의 자리를 바꿈
-	 * 3. 자리가 바뀌는 것이 없을 때 까지 계속 반복
-	 */
 	public int[] sorting(int[] source) {
-		if (isDebug) System.out.println("[디버그] 메소드 sorting(int[] source) start.");
+		if (isDebug) System.out.println("[디버그] 메소드 sorting(int[] source) 시작.");
 		
 		long start_algorithm = System.currentTimeMillis();
 		
@@ -53,24 +61,19 @@ public class BubbleSort {
 		int count = 0;
 		int[] sorted = new int[source.length];
 		
-		// 배열 복사
 		for (int i = 0; i < source.length; i++) {
 			sorted[i] = source[i];
 		}
 		
-		// 배열의 크기만큼 계속 반복문 실행
 		while (count <= size) {
 			if (isDebug) System.out.println("[디버그] count=" + count + ", size=" + size);
 			
-			// 배열의 오른쪽 끝 부터 비교 시작
 			for (int i = (size - 1); i >= 0; i--) {
-				// 2개의 비교 대상 중 i 에 있는 원소를 right 에, i != 0 일 경우 (i-1) 에 있는 원소를 left 에 옮기고, i == 0 일 경우 종료
 				right = sorted[i];
 				
 				if (i != 0) {
 					left = sorted[i-1];
 					
-					// 왼쪽에 있는 숫자가 오른쪽에 있는 숫자보다 클 경우 양쪽 자리 바꾸기 (졍렬 방식 2.)
 					if (left > right) {
 						temp = left;
 						left = right;
@@ -79,7 +82,7 @@ public class BubbleSort {
 						sorted[i] = right;
 						sorted[(i-1)] = left;
 						
-						if (isDebug) System.out.println("[디버그] move sorted[" + i + "]=" + right + " and sorted[" + (i - 1) + "]=" + left);
+						if (isDebug) System.out.println("[디버그] sorted[" + i + "]=" + right + " 와 sorted[" + (i - 1) + "]=" + left + " (을)를 서로 바꿨습니다.");
 					}
 				}
 				else {
@@ -95,7 +98,7 @@ public class BubbleSort {
 		long stop_algorithm = System.currentTimeMillis();
 		this.setProcessTime((stop_algorithm - start_algorithm));
 		
-		if (isDebug) System.out.println("\nPrc_Start: " + start_algorithm + " / Prc_Stop: " + stop_algorithm + " / Prc_Time: " + (stop_algorithm - start_algorithm));
+		if (isDebug) System.out.println("\n[디버그] Alg_Start: " + start_algorithm + " / Alg_Stop: " + stop_algorithm + " / Alg_Time: " + (stop_algorithm - start_algorithm));
 		
 		return sorted;
 	}
@@ -140,7 +143,7 @@ public class BubbleSort {
 		
 		long prc_stop = System.currentTimeMillis();
 		
-		if (isDebug) System.out.println("\nPrg_Start: " + prc_start + " / Prg_Stop: " + prc_stop + " / Prg_Time: " + (prc_stop - prc_start));
+		if (isDebug) System.out.println("\n[디버그] Prg_Start: " + prc_start + " / Prg_Stop: " + prc_stop + " / Prg_Time: " + (prc_stop - prc_start));
 		
 		System.out.println("\n정렬 알고리즘 처리 시간: " + BubbleSort.getProcessTime() + " ms");
 		System.out.println("프로그램 처리 시간: " + (prc_stop - prc_start) + " ms");
