@@ -3,7 +3,7 @@ package jvision.proad.algorithms.sorting;
 import java.util.Scanner;
 
 /*
- * > 공부하는 로드: 선택 알고리즘 (Selection Sort)
+ * > 공부하는 로드: 선택 정렬 (Selection Sort)
  * 
  * > 작동 방식:
  * 1. 정렬할 배열의 모든 원소를 "선형 탐색" 하여 최솟값을 찾습니다.

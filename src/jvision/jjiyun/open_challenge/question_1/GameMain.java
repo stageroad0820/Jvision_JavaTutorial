@@ -1,4 +1,4 @@
-package jvision.jjiyun.opc.q1;
+package jvision.jjiyun.open_challenge.question_1;
 
 public class GameMain {
 	public static final int MAX_X = 10;

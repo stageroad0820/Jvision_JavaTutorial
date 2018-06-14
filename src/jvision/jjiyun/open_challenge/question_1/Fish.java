@@ -1,4 +1,4 @@
-package jvision.jjiyun.opc.q1;
+package jvision.jjiyun.open_challenge.question_1;
 
 public class Fish extends GameObject {
 	public Fish(int startX, int startY, int distance) {

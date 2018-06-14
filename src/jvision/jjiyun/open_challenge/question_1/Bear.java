@@ -1,4 +1,4 @@
-package jvision.jjiyun.opc.q1;
+package jvision.jjiyun.open_challenge.question_1;
 
 import java.util.Scanner;
 
