@@ -1,27 +1,61 @@
 package jvision.proad.algorithms.data_structure;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Stack {
-	static ArrayList<Integer> stack = new ArrayList<>();
-	
+	static Integer[] stack = new Integer[10];
+		
 	public void push(int element) {
-		stack.add(element);
-		System.out.println("Stack 에 " + element + " 값이 push 되었습니다.");
+		if (stack[stack.length-1] != null) {
+			System.out.println("Stack 에 " + element + " 값이 push 되지 못했습니다. 사유: Stack 이 가득 찼습니다. Pop 을 실행해 주세요.");
+		}
+		else {
+			for (int i = 0; i < stack.length; i++) {
+				if (stack[i] == null) {
+					stack[i] = element;
+					break;
+				}
+			}
+			
+			System.out.println("Stack 에 " + element + " 값이 push 되었습니다.");
+		}
 	}
 	
 	public int pop() {
-		int pop = stack.get((getSize() - 1));
-		System.out.println("Stack 에서 " + pop + " [index=" + (getSize() - 1) + "] 값이 pop 되었습니다.");
+		int pop = 0;
 		
-		stack.remove((getSize() - 1));
-		
-		return pop;
+		if (getSize() == 0) {
+			pop = stack[0];
+			System.out.println("Stack 에서 " + pop + " [index=" + (getSize() - 1) + "] 값이 pop 되었습니다.");
+			
+			stack[0] = null;
+			
+			return pop;
+		}
+		else if (getSize() > 0) {
+			pop = stack[(getSize() - 1)];
+			System.out.println("Stack 에서 " + pop + " [index=" + (getSize() - 1) + "] 값이 pop 되었습니다.");
+			
+			stack[(getSize() - 1)] = null;
+			
+			return pop;
+		}
+		else {
+			System.out.println("Stack 에서 값을 Pop 하는 도중 문제가 발생하였습니다. 0이 반환됩니다.");
+			return pop;
+		}
 	}
 	
 	public int getSize() {
-		return stack.size();
+		int size = 0;
+		
+		for (int i = 0; i < stack.length; i++) {
+			if (stack[i] != null) {
+				size++;
+			}
+		}
+		
+		return size;
 	}
 	
 	public static void main(String[] args) {
@@ -59,7 +93,7 @@ public class Stack {
 					System.out.println("현재 Stack 에 있는 값은 다음과 같으며 오른쪽으로 갈 수록 index 값이 큽니다.");
 					
 					for (int i = 0; i < alg.getSize(); i++) {
-						System.out.print(stack.get(i) + ", ");
+						System.out.print(stack[i] + ", ");
 					}
 					System.out.println("");
 				}

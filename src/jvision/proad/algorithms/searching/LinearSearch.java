@@ -42,6 +42,7 @@ public class LinearSearch {
 	
 	public static void onStart(int size, String type) {
 		LinearSearch alg = new LinearSearch(size);
+		
 	}
 	
 	private void setProcess(long time) {

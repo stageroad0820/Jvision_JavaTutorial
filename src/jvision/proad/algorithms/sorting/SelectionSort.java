@@ -19,7 +19,6 @@ import java.util.Scanner;
  * [링크: https://play.google.com/store/apps/details?id=wiki.algorithm.algorithms]
  */
 
-@SuppressWarnings("unused")
 public class SelectionSort {
 	static int[] arr;
 	static boolean isDebug = true;
@@ -134,10 +133,6 @@ public class SelectionSort {
 		}
 		
 		System.out.println("");
-	}
-	
-	private static long getProcessTime() {
-		return SelectionSort.process;
 	}
 	
 	private static void setProcessTime(long time) {
