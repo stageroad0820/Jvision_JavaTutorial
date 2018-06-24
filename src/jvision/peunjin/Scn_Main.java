@@ -1,15 +1,17 @@
 package jvision.peunjin;
-
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JRadioButton;
@@ -20,7 +22,6 @@ import javax.swing.JButton;
 
 @SuppressWarnings("serial")
 public class Scn_Main extends JFrame {
-
 	private JPanel contentPane;
 	private JTextField tf_name;
 	private JTextField tf_num;
@@ -76,18 +77,23 @@ public class Scn_Main extends JFrame {
 		ButtonGroup bgroup1 = new ButtonGroup();
 		
 		JRadioButton rb_1g = new JRadioButton("1학년");
+		rb_1g.setActionCommand(rb_1g.getText());
+		rb_1g.setSelected(true);
 		rb_1g.setBounds(8, 32, 85, 23);
 		pan_grade.add(rb_1g);
 		
 		JRadioButton rb_2g = new JRadioButton("2학년");
+		rb_2g.setActionCommand(rb_2g.getText());
 		rb_2g.setBounds(8, 57, 85, 23);
 		pan_grade.add(rb_2g);
 		
 		JRadioButton rb_3g = new JRadioButton("3학년");
+		rb_3g.setActionCommand(rb_3g.getText());
 		rb_3g.setBounds(8, 82, 85, 23);
 		pan_grade.add(rb_3g);
 		
 		JRadioButton rb_4g = new JRadioButton("4학년");
+		rb_4g.setActionCommand(rb_4g.getText());
 		rb_4g.setBounds(8, 107, 85, 23);
 		pan_grade.add(rb_4g);
 		
@@ -105,10 +111,12 @@ public class Scn_Main extends JFrame {
 		ButtonGroup bgroup2 = new ButtonGroup();
 		
 		JRadioButton rb_f = new JRadioButton("여자");
+		rb_f.setActionCommand(rb_f.getText());
 		rb_f.setBounds(8, 34, 85, 23);
 		pan_gender.add(rb_f);
 		
 		JRadioButton rb_m = new JRadioButton("남자");
+		rb_m.setActionCommand(rb_m.getText());
 		rb_m.setBounds(8, 59, 85, 23);
 		pan_gender.add(rb_m);
 		
@@ -170,13 +178,47 @@ public class Scn_Main extends JFrame {
 		contentPane.add(cancel);
 		
 		JButton ok = new JButton("확인");
+		ok.setBounds(316, 298, 97, 23);
 		ok.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				ArrayList<String> hobby = new ArrayList<>();
 				
+				if (cb_book.isSelected()) {
+					hobby.add(cb_book.getText());
+				}
+				if (cb_movie.isSelected()) {
+					hobby.add(cb_movie.getText());
+				}
+				if (cb_tv.isSelected()) {
+					hobby.add(cb_tv.getText());
+				}
+				if (cb_sports.isSelected()) {
+					hobby.add(cb_sports.getText());
+				}
+				if (cb_study.isSelected()) {
+					hobby.add(cb_study.getText());
+				}
+				
+				String[] hobbies = new String[hobby.size()];
+				
+				for (int i = 0; i < hobbies.length; i++) {
+					hobbies[i] = hobby.get(i);
+				}
+				
+				EventQueue.invokeLater(new Runnable() {
+					public void run() {
+						try {
+							Scn_Info info = new Scn_Info(tf_num.getText(), tf_name.getText(), bgroup1.getSelection().getActionCommand().toString(), bgroup2.getSelection().getActionCommand().toString(), hobbies, comboBox.getSelectedItem().toString());
+							info.setVisible(true);
+						} catch (Exception e) {
+							JOptionPane.showMessageDialog(null, "데이터를 입력 후 [확인] 버튼을 눌러주세요!", "데이터 입력 안됨", JOptionPane.ERROR_MESSAGE);
+							e.printStackTrace();
+						}
+					}
+				});
 			}
 		});
-		ok.setBounds(316, 298, 97, 23);
 		contentPane.add(ok);
 	}
 }
